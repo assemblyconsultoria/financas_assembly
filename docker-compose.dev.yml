@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Development
+  postgres:
+    image: postgres:16-alpine
+    container_name: financas-postgres-dev
+    environment:
+      POSTGRES_DB: financas_db_dev
+      POSTGRES_USER: financas_user
+      POSTGRES_PASSWORD: financas_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - financas-network
+
+  # PgAdmin for Database Management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: financas-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@financas.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - financas-network
+
+networks:
+  financas-network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+    driver: local

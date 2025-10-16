@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: financas-postgres
+    environment:
+      POSTGRES_DB: financas_db
+      POSTGRES_USER: financas_user
+      POSTGRES_PASSWORD: financas_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U financas_user -d financas_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - financas-network
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: financas-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/financas_db
+      SPRING_DATASOURCE_USERNAME: financas_user
+      SPRING_DATASOURCE_PASSWORD: financas_password
+      JWT_SECRET: your-secret-key-change-this-in-production-min-256-bits-required-for-hs256-algorithm
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/api/v1/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - financas-network
+    volumes:
+      - ./backend/logs:/app/logs
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: financas-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - financas-network
+
+  # Redis (optional - for caching in production)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: financas-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - financas-network
+
+networks:
+  financas-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  # redis_data:
+  #   driver: local
