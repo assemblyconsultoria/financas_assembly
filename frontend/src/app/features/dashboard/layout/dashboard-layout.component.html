@@ -1,0 +1,96 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidenav -->
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="isSidenavOpen()"
+    class="sidenav"
+  >
+    <div class="sidenav-header">
+      <mat-icon class="logo-icon">account_balance</mat-icon>
+      <h2 class="app-title">Financial Assembly</h2>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      @for (item of menuItems; track item.route) {
+        <mat-list-item
+          class="nav-item"
+          [class.active]="router.url === item.route"
+          (click)="navigateTo(item.route)"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </mat-list-item>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-list-item class="version-info">
+        <mat-icon matListItemIcon>info</mat-icon>
+        <span matListItemTitle>Version 1.0.0</span>
+      </mat-list-item>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content class="sidenav-content">
+    <!-- Toolbar -->
+    <mat-toolbar color="primary" class="toolbar">
+      <button
+        mat-icon-button
+        (click)="toggleSidenav()"
+        class="menu-button"
+        aria-label="Toggle menu"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="toolbar-spacer"></span>
+
+      <!-- User Menu -->
+      <button
+        mat-button
+        [matMenuTriggerFor]="userMenu"
+        class="user-button"
+      >
+        <div class="user-avatar">{{ getUserInitials() }}</div>
+        <span class="user-name">{{ currentUser()?.name || 'User' }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu">
+        <div class="user-menu-header">
+          <div class="user-avatar-large">{{ getUserInitials() }}</div>
+          <div class="user-info">
+            <div class="user-name-large">{{ currentUser()?.name }}</div>
+            <div class="user-email">{{ currentUser()?.email }}</div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,21 @@
+import { Routes } from '@angular/router';
+import { authGuard } from '../../core/guards/auth.guard';
+
+export const CLIENTES_ROUTES: Routes = [
+  {
+    path: '',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('../dashboard/layout/dashboard-layout.component').then(m => m.DashboardLayoutComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./list/clientes-list.component').then(m => m.ClientesListComponent)
+          }
+        ]
+      }
+    ]
+  }
+];

@@ -1,0 +1,113 @@
+<div class="dashboard-home">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Welcome back! Here's what's happening with your finances.</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    @for (stat of stats(); track stat.title) {
+      <mat-card class="stat-card">
+        <div class="stat-card-content">
+          <div class="stat-icon" [style.background-color]="stat.color">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </div>
+          <div class="stat-info">
+            <p class="stat-title">{{ stat.title }}</p>
+            <h2 class="stat-value">{{ stat.value }}</h2>
+            @if (stat.trend) {
+              <div class="stat-trend" [class.positive]="stat.trend.isPositive" [class.negative]="!stat.trend.isPositive">
+                <mat-icon>{{ stat.trend.isPositive ? 'trending_up' : 'trending_down' }}</mat-icon>
+                <span>{{ stat.trend.value }}% from last month</span>
+              </div>
+            }
+          </div>
+        </div>
+      </mat-card>
+    }
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section">
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="quick-actions-grid">
+      @for (action of quickActions; track action.title) {
+        <mat-card class="action-card" [style.border-left-color]="action.color">
+          <mat-card-content>
+            <div class="action-icon" [style.background-color]="action.color + '20'" [style.color]="action.color">
+              <mat-icon>{{ action.icon }}</mat-icon>
+            </div>
+            <h3>{{ action.title }}</h3>
+            <button mat-button [style.color]="action.color">
+              Get Started
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="section">
+    <h2 class="section-title">Recent Activity</h2>
+    <mat-card class="activity-card">
+      <mat-card-content>
+        @if (recentActivities().length > 0) {
+          <div class="activity-list">
+            @for (activity of recentActivities(); track $index) {
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <mat-icon>{{ activity.icon }}</mat-icon>
+                </div>
+                <div class="activity-content">
+                  <h4>{{ activity.title }}</h4>
+                  <p>{{ activity.description }}</p>
+                </div>
+                <div class="activity-time">
+                  {{ activity.time }}
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <mat-icon>inbox</mat-icon>
+            <p>No recent activity</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Charts Section (Placeholder for future implementation) -->
+  <div class="section">
+    <h2 class="section-title">Financial Overview</h2>
+    <div class="charts-grid">
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Revenue vs Expenses</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-placeholder">
+            <mat-icon>bar_chart</mat-icon>
+            <p>Chart will be available once you have transaction data</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Transaction Categories</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-placeholder">
+            <mat-icon>pie_chart</mat-icon>
+            <p>Chart will be available once you have transaction data</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

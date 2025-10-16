@@ -61,7 +61,7 @@ public class Empresa extends Cliente {
     @Column(name = "responsavel_nome", length = 100)
     private String responsavelNome;
 
-    @Size(max = "100", message = "Email do responsável deve ter no máximo 100 caracteres")
+    @Size(max = 100, message = "Email do responsável deve ter no máximo 100 caracteres")
     @Column(name = "responsavel_email", length = 100)
     private String responsavelEmail;
 
