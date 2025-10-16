@@ -59,7 +59,10 @@ export class RegisterComponent {
 
     this.isLoading.set(true);
 
-    this.authService.register(this.registerForm.value).subscribe({
+    // Remove confirmPassword before sending to backend
+    const { confirmPassword, ...registerData } = this.registerForm.value;
+
+    this.authService.register(registerData).subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
         this.showMessage('Registration successful! Welcome aboard!');

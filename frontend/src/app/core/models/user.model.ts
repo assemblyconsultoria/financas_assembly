@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id?: number;
   email: string;
   name: string;
   roles: string[];
@@ -14,11 +14,18 @@ export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
 export interface AuthResponse {
-  token: string;
-  type: string;
-  user: User;
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  email: string;
+  name: string;
+  roles: string[];
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
 }
