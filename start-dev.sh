@@ -25,7 +25,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check Docker Compose
-if ! command -v docker-compose &> /dev/null; then
+if ! command -v docker compose &> /dev/null; then
     echo -e "${RED}Error: Docker Compose is not installed${NC}"
     exit 1
 fi
@@ -73,7 +73,7 @@ case $choice in
     1)
         echo ""
         echo -e "${GREEN}Starting full stack with Docker Compose...${NC}"
-        docker-compose up -d --build
+        docker compose up -d --build
 
         echo ""
         echo -e "${GREEN}Waiting for services to be ready...${NC}"
@@ -96,7 +96,7 @@ case $choice in
     2)
         echo ""
         echo -e "${GREEN}Starting PostgreSQL and PgAdmin...${NC}"
-        docker-compose -f docker-compose.dev.yml up -d
+        docker compose -f docker-compose.dev.yml up -d
 
         echo ""
         echo -e "${GREEN}Waiting for database to be ready...${NC}"
@@ -139,7 +139,7 @@ case $choice in
     3)
         echo ""
         echo -e "${GREEN}Starting PostgreSQL and PgAdmin only...${NC}"
-        docker-compose -f docker-compose.dev.yml up -d
+        docker compose -f docker-compose.dev.yml up -d
 
         echo ""
         echo -e "${GREEN}Waiting for database to be ready...${NC}"
