@@ -6,7 +6,7 @@ services:
     image: postgres:16-alpine
     container_name: financas-postgres
     environment:
-      POSTGRES_DB: financas_db
+      POSTGRES_DB: financas_db_dev
       POSTGRES_USER: financas_user
       POSTGRES_PASSWORD: financas_password
     ports:
@@ -30,7 +30,7 @@ services:
     container_name: financas-backend
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/financas_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/financas_db_dev
       SPRING_DATASOURCE_USERNAME: financas_user
       SPRING_DATASOURCE_PASSWORD: financas_password
       JWT_SECRET: your-secret-key-change-this-in-production-min-256-bits-required-for-hs256-algorithm
