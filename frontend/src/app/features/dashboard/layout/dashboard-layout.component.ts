@@ -37,7 +37,7 @@ interface MenuItem {
 })
 export class DashboardLayoutComponent {
   private authService = inject(AuthService);
-  private router = inject(Router);
+  protected router = inject(Router);
   private breakpointObserver = inject(BreakpointObserver);
 
   currentUser = computed(() => this.authService.getCurrentUser());
